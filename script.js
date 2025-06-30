@@ -122,3 +122,47 @@ function saveWorkout() {
 }
 
 loadCalendar(currentMonth);
+
+
+
+function saveWorkout() {
+  const input = document.getElementById("workoutInput").value;
+  if (input.trim()) {
+    workoutLogs[selectedDay] = input.trim();
+  } else {
+    delete workoutLogs[selectedDay];
+  }
+  closePopup();
+  localStorage.setItem("logs", JSON.stringify(workoutLogs)); // Persist
+  loadCalendar(currentMonth);
+  renderSavedTable(); // Update the saved table
+}
+
+// Load saved data if any
+const savedFromLocal = JSON.parse(localStorage.getItem("logs"));
+if (savedFromLocal) {
+  Object.assign(workoutLogs, savedFromLocal);
+}
+
+function renderSavedTable() {
+  const tableBody = document.getElementById("savedLogBody");
+  tableBody.innerHTML = "";
+
+  const sortedDates = Object.keys(workoutLogs).sort();
+  sortedDates.forEach(date => {
+    const dateObj = new Date(date);
+    const startDate = new Date("2024-07-01");
+    const diffDays = Math.floor((dateObj - startDate) / (1000 * 60 * 60 * 24));
+    const workoutType = pushPullLegs[diffDays % 7] || "Workout";
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${date}</td>
+      <td>${workoutType}</td>
+      <td>${workoutLogs[date]}</td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+renderSavedTable(); // Render once on load

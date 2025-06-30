@@ -255,3 +255,42 @@ button:hover {
 }
 
 
+
+.saved-table-section {
+  margin-top: 50px;
+  padding: 20px;
+  background: #111;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #00ffe123;
+}
+
+.saved-table-section h2 {
+  color: #00ffe1;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 15px;
+  text-shadow: 0 0 8px #00ffe180;
+}
+
+#savedLogTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: auto;
+}
+
+#savedLogTable th,
+#savedLogTable td {
+  border-bottom: 1px solid #444;
+  padding: 10px 15px;
+  text-align: left;
+  color: #ccc;
+}
+
+#savedLogTable th {
+  background-color: #1b1b1b;
+  color: #00ffe1;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+}
