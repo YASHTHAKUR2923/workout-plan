@@ -1,3 +1,4 @@
+
 let currentMonth = 6; // July
 let selectedDay = null;
 const workoutLogs = {};
@@ -52,6 +53,12 @@ const fullWorkouts = {
   "Rest": ["Rest Day — Hydrate, Stretch, Recover 🙏"]
 };
 
+// Cardio/Core alternate workouts
+const extraWorkouts = [
+  ["Crunches: 4 sets", "10-15 min Running"],
+  ["Burpees: 3 sets", "Plank Hold: 3 sets"]
+];
+
 function loadCalendar(monthIndex) {
   currentMonth = monthIndex;
   calendar.innerHTML = "";
@@ -97,11 +104,30 @@ function openPopup(dateKey, dayNumber) {
 
   const workoutPlan = document.getElementById("workoutPlanList");
   workoutPlan.innerHTML = "";
+
+  // Main workout
   fullWorkouts[type].forEach(ex => {
     const li = document.createElement("li");
     li.textContent = ex;
     workoutPlan.appendChild(li);
   });
+
+  // Add cardio/core alternates if not rest
+  if (type !== "Rest") {
+    const extra = extraWorkouts[diffDays % 2];
+
+    const extraHeader = document.createElement("li");
+    extraHeader.textContent = "➤ Extra (Cardio/Core):";
+    extraHeader.style.fontWeight = "bold";
+    workoutPlan.appendChild(extraHeader);
+
+    extra.forEach(exercise => {
+      const li = document.createElement("li");
+      li.textContent = exercise;
+      li.style.color = "#007bff";
+      workoutPlan.appendChild(li);
+    });
+  }
 
   document.getElementById("workoutInput").value = workoutLogs[dateKey] || "";
 }
@@ -109,21 +135,6 @@ function openPopup(dateKey, dayNumber) {
 function closePopup() {
   document.getElementById("logPopup").style.display = "none";
 }
-
-function saveWorkout() {
-  const input = document.getElementById("workoutInput").value;
-  if (input.trim()) {
-    workoutLogs[selectedDay] = input.trim();
-  } else {
-    delete workoutLogs[selectedDay];
-  }
-  closePopup();
-  loadCalendar(currentMonth);
-}
-
-loadCalendar(currentMonth);
-
-
 
 function saveWorkout() {
   const input = document.getElementById("workoutInput").value;
@@ -165,4 +176,6 @@ function renderSavedTable() {
   });
 }
 
-renderSavedTable(); // Render once on load
+loadCalendar(currentMonth);
+renderSavedTable();
+
